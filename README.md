@@ -1,1 +1,1 @@
-# appbir_scan_deploy
+安装部署下载后，参考html>DOC下说明文档
