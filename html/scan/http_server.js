@@ -41,13 +41,17 @@ server.on('request', function (req, res) {
 var getLocalIP = function () {
     const os = require('os');
     const ifaces = os.networkInterfaces();
+    // console.log(ifaces);
     let locatIp = '';
     for (let dev in ifaces) {
-        if (dev === '本地连接') {
+        if ((dev === '本地连接') || (dev==='无线网络连接')) {
             for (let j = 0; j < ifaces[dev].length; j++) {
                 if (ifaces[dev][j].family === 'IPv4') {
-                    locatIp = ifaces[dev][j].address;
-                    break;
+                    let ip = ifaces[dev][j].address;
+                    if(ip){
+                         locatIp = ifaces[dev][j].address;
+                         break;
+                    }
                 }
             }
         }
@@ -56,6 +60,12 @@ var getLocalIP = function () {
 }
 
 server.listen(config.server.port, function () {
-    console.log('服务器启动成功了，可以通过 http://%s:%s来进行访问...', getLocalIP(), config.server.port);
+    let ip = getLocalIP();
+    if(!ip){
+        console.log('服务器启动失败，无法获取到ip');
+    }else{
+        console.log('服务器启动成功了，可以通过 http://%s:%s来进行访问...', ip, config.server.port);
+    }
+    
 })
 
